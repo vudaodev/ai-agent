@@ -1,5 +1,6 @@
 # Library imports
 import os
+import argparse
 from dotenv import load_dotenv
 from google import genai
 load_dotenv()
@@ -13,8 +14,14 @@ if api_key == None:
 client = genai.Client(api_key=api_key)
 
 def main():
+    # Create parser object
+    parser = argparse.ArgumentParser(description = "Prompt for Gemini AI Agent")
+    # Define arguments for the parser to accept
+    parser.add_argument("user_prompt", type=str, help="The user should enter a prompt that goes to Google Gemini")
+    args = parser.parse_args()
+
     response = client.models.generate_content(
-        model='gemini-2.5-flash', contents="Why is Boot.dev such a great place to learn backend development? Use one paragraph maximum."
+        model='gemini-2.5-flash', contents= args.user_prompt
     )
     print(f'Prompt tokens: {response.usage_metadata.prompt_token_count}')
     print(response.text)        
